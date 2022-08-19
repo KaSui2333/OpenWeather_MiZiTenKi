@@ -1,0 +1,3 @@
+D:\code\C#\OpenWeather\bin\Release\net6.0-android\publish\com.kasui.openweather-Signed.aab
+D:\code\C#\OpenWeather\bin\Release\net6.0-android\publish\com.kasui.openweather.aab
+D:\code\C#\OpenWeather\bin\Release\net6.0-android\publish\com.kasui.openweather-Signed.apk

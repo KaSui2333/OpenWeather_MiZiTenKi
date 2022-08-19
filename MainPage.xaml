@@ -1,0 +1,488 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:OpenWeather"
+             x:Class="OpenWeather.MainPage">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="labelStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Small"/>
+                <Setter Property="TextColor" Value="Gray"/>
+            </Style>
+            <Style x:Key="labelResultStyle" TargetType="Label">
+                <Setter Property="FontSize" Value="Medium"/>
+                <Setter Property="Margin" Value="10,0,0,0"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <!--菜单-->
+    <ContentPage.ToolbarItems >
+        <ToolbarItem Text="Donate"
+                     IconImageSource="donate.png"
+                     Order="Primary"
+                     Priority="0"
+                     Clicked="OnDonateCLC"/>
+        <ToolbarItem Text="Help"
+                     IconImageSource="help.png"
+                     Order="Primary"
+                     Priority="1"
+                     Clicked="OnHelpCLC"/>
+        <ToolbarItem Text="About"
+                     IconImageSource="about.png"
+                     Order="Primary"
+                     Priority="2"
+                     Clicked="OnAboutCLC"/>
+    </ContentPage.ToolbarItems>
+
+    <Grid VerticalOptions="FillAndExpand">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--背景-->
+        <Image Aspect="Fill" 
+               HeightRequest="300" 
+               Source="bg.png" 
+               VerticalOptions="StartAndExpand"/>
+
+        <!--城市-->
+        <StackLayout Margin="30,20" HorizontalOptions="Start" Orientation="Vertical" Spacing="20" VerticalOptions="Start">
+            <Picker x:Name="_cityChoose" FontSize="20" TextColor="White" FontAttributes="Bold" Title="{Binding City}" TitleColor="Black" SelectedIndexChanged="OnPickerSelectedIndexChanged">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}" >
+                        <x:String>杭州</x:String>
+                        <x:String>宁波</x:String>
+                        <x:String>温州</x:String>
+                        <x:String>嘉兴</x:String>
+                        <x:String>湖州</x:String>
+                        <x:String>绍兴</x:String>
+                        <x:String>金华</x:String>
+                        <x:String>衢州</x:String>
+                        <x:String>舟山</x:String>
+                        <x:String>台州</x:String>
+                        <x:String>丽水</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+        </StackLayout>
+
+        <StackLayout x:Name="_nowWeatherData" HorizontalOptions="Center" Orientation="Vertical" VerticalOptions="Center">
+            <!--温度-->
+            <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                <Image HeightRequest="100" 
+                       Source="{Binding WeaImg,StringFormat='{}{0}.png'}"
+                       VerticalOptions="Center" 
+                       WidthRequest="100"/>
+                <Label FontAttributes="Bold" 
+                       FontSize="70" 
+                       Text="{Binding Tem}" 
+                       TextColor="White" 
+                       VerticalOptions="Center" 
+                       HorizontalOptions="End"
+                       HorizontalTextAlignment="Center"/>
+                <Label FontAttributes="Bold" 
+                       FontSize="40" 
+                       Text=" °C" 
+                       TextColor="White"
+                       VerticalOptions="Center"
+                       HorizontalTextAlignment="Center"/>
+            </StackLayout>
+            <!--最高最低-->
+            <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                <Image HeightRequest="20" 
+                       Source="mm.png"
+                       VerticalOptions="Center"/>
+                <Label FontSize="25" 
+                       Text="{Binding TemNight}" 
+                       TextColor="White" 
+                       HorizontalOptions="End"
+                       HorizontalTextAlignment="Center"/>
+                <Label FontSize="25" 
+                       Text=" / " 
+                       TextColor="White" 
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"/>
+                <Label FontSize="25" 
+                       Text="{Binding TemDay}" 
+                       TextColor="White" 
+                       HorizontalOptions="Start"
+                       HorizontalTextAlignment="Center"/>
+                <Label FontSize="25" 
+                       Text=" °C" 
+                       TextColor="White" 
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center"/>
+            </StackLayout>
+            <!--天气-->
+            <Label FontSize="16" 
+                   HorizontalOptions="Center" 
+                   TextColor="White"
+                   Text="{Binding Wea}"
+                   HorizontalTextAlignment="Center"/>
+            <StackLayout Margin="5" HorizontalOptions="Center" Orientation="Horizontal">
+            <!--时间-->
+                <Label FontSize="12" 
+                       HorizontalOptions="Center" 
+                       Text="{Binding Date}"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"/>
+                <Label FontSize="12" 
+                       HorizontalOptions="Center" 
+                       Text="  "
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"/>
+                <Label FontSize="12" 
+                       HorizontalOptions="Center" 
+                       Text="{Binding Week}"
+                       TextColor="White"
+                       HorizontalTextAlignment="Center"/>
+            </StackLayout>
+            <Label FontSize="12" 
+                   HorizontalOptions="Center" 
+                   Text="{Binding UpdateTime}"
+                   TextColor="White"/>
+        </StackLayout>
+
+        <Frame x:Name="_nowOtherData" Grid.Row="1" Margin="20,-40,20,0" Padding="0" CornerRadius="10" HasShadow="True" HeightRequest="120" VerticalOptions="Start">
+            <Grid HorizontalOptions="FillAndExpand" VerticalOptions="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <!--湿度-->
+                <StackLayout Grid.Column="0" HorizontalOptions="CenterAndExpand" Orientation="Vertical" Spacing="10">
+                    <Image Source="sd.png" HeightRequest="25" WidthRequest="25"/>
+                    <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
+                        <Label FontSize="12" 
+                               FontAttributes="Bold" 
+                               HorizontalOptions="Center" 
+                               Text="{Binding Humidity}"
+                               HorizontalTextAlignment="Center"/>
+                        <Label FontSize="10" 
+                               HorizontalOptions="Center" 
+                               Text="Humidity"
+                               TextColor="#7D7D7D"
+                               HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+                </StackLayout>
+                <!--风速-->
+                <StackLayout Grid.Column="1" HorizontalOptions="CenterAndExpand" Orientation="Vertical" Spacing="10">
+                    <Image Source="fs.png" HeightRequest="25" WidthRequest="25"/>
+                    <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
+                        <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                            <Label FontSize="12" 
+                                   FontAttributes="Bold" 
+                                   Text="{Binding Win}"
+                                   HorizontalOptions="Fill"
+                                   WidthRequest="40"
+                                   HorizontalTextAlignment="Center"/>
+                            <Label FontSize="12" 
+                                   FontAttributes="Bold" 
+                                   Text="{Binding WinMeter}"
+                                   HorizontalOptions="Fill"
+                                   WidthRequest="40"
+                                   HorizontalTextAlignment="Center"/>
+                        </StackLayout>
+                        <Label FontSize="10" 
+                               HorizontalOptions="Center" 
+                               Text="Wind"
+                               TextColor="#7D7D7D"
+                               HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+                </StackLayout>
+                <!--气压-->
+                <StackLayout Grid.Column="2" HorizontalOptions="CenterAndExpand" Orientation="Vertical" Spacing="10">
+                    <Image Source="qy.png" HeightRequest="25" WidthRequest="25"/>
+                    <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
+                        <Label FontSize="12" 
+                               FontAttributes="Bold" 
+                               HorizontalOptions="Center" 
+                               Text="{Binding Pressure,StringFormat='{}{0}hPa'}"
+                               HorizontalTextAlignment="Center"/>
+                        <Label FontSize="10" 
+                               HorizontalOptions="Center" 
+                               Text="Pressure"
+                               TextColor="#7D7D7D"
+                               HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+                </StackLayout>
+                <!--空气质量-->
+                <StackLayout Grid.Column="3" HorizontalOptions="CenterAndExpand" Orientation="Vertical" Spacing="10">
+                    <Image Source="kqzl.png" HeightRequest="25" WidthRequest="25"/>
+                    <StackLayout HorizontalOptions="CenterAndExpand" Spacing="7">
+                        <Label FontSize="12" 
+                               FontAttributes="Bold" 
+                               HorizontalOptions="Center" 
+                               Text="{Binding Air}"
+                               HorizontalTextAlignment="Center"/>
+                        <Label FontSize="10" 
+                               HorizontalOptions="Center" 
+                               Text="Air"
+                               TextColor="#7D7D7D"
+                               HorizontalTextAlignment="Center"/>
+                    </StackLayout>
+                </StackLayout>
+            </Grid>
+        </Frame>
+
+        <!--5天天气-->
+        <ScrollView x:Name="_5DayData" Grid.Row="2" HorizontalScrollBarVisibility="Never">
+            <StackLayout Orientation="Vertical" VerticalOptions="StartAndExpand">
+                <Grid HorizontalOptions="FillAndExpand"  VerticalOptions="CenterAndExpand">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!--1日-->
+                    <!--日期-->
+                    <StackLayout Grid.Row="1" Grid.Column="0" Margin="0,-10,0,0" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <Label FontSize="15" 
+                               HorizontalTextAlignment="Center"
+                               Text="{Binding Data[1].Date}"
+                               TextColor="Black"/>
+                    </StackLayout>
+
+                    <!--天气-->
+                    <StackLayout Grid.Row="1" Grid.Column="1" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <Image HeightRequest="60" 
+                               Source="{Binding Data[1].WeaImg,StringFormat='{0}.png'}"
+                               VerticalOptions="Center" 
+                               WidthRequest="60"/>
+                        <Label Margin="0,-10,0,0"
+                               FontSize="16" 
+                               HorizontalTextAlignment="Center"
+                               TextColor="Black"
+                               Text="{Binding Data[1].Wea}"/>
+                    </StackLayout>
+
+                    <!--温度-->
+                    <StackLayout Grid.Row="1" Grid.Column="2" Margin="0,0,0,10" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                            <Label FontSize="16" 
+                                   Text="{Binding Data[1].TemNight}" 
+                                   TextColor="Black" 
+                                   WidthRequest="20"
+                                   HorizontalTextAlignment="End"/>
+                            <Label FontSize="16" 
+                                   Text=" / " 
+                                   TextColor="Black"/>
+                            <Label FontSize="16" 
+                                   Text="{Binding Data[1].TemDay}" 
+                                   TextColor="Black" 
+                                   WidthRequest="20"
+                                   HorizontalTextAlignment="Start"/>
+                            <Label FontSize="16" 
+                                   Text=" °C" 
+                                   TextColor="Black"/>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <!--2日-->
+                    <!--日期-->
+                    <StackLayout Grid.Row="2" Grid.Column="0" Margin="0,-10,0,0" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <Label FontSize="15" 
+                               HorizontalTextAlignment="Center"
+                               Text="{Binding Data[2].Date}"
+                               TextColor="Black"/>
+                    </StackLayout>
+
+                    <!--天气-->
+                    <StackLayout Grid.Row="2" Grid.Column="1" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <StackLayout VerticalOptions="Center" Orientation="Vertical">
+                            <Image HeightRequest="60" 
+                                   Source="{Binding Data[2].WeaImg,StringFormat='{0}.png'}"
+                                   VerticalOptions="Center" 
+                                   WidthRequest="60"/>
+                            <Label Margin="0,-10,0,0"
+                                   FontSize="16" 
+                                   HorizontalTextAlignment="Center"
+                                   TextColor="Black"
+                                   Text="{Binding Data[2].Wea}"/>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <!--温度-->
+                    <StackLayout Grid.Row="2" Grid.Column="2" Margin="0,0,0,10" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                            <Label FontSize="16" 
+                                   Text="{Binding Data[2].TemNight}" 
+                                   TextColor="Black" 
+                                   WidthRequest="20"
+                                   HorizontalTextAlignment="End"/>
+                            <Label FontSize="16" 
+                                   Text=" / " 
+                                   TextColor="Black"/>
+                            <Label FontSize="16" 
+                                   Text="{Binding Data[2].TemDay}" 
+                                   TextColor="Black" 
+                                   WidthRequest="20"
+                                   HorizontalTextAlignment="Start"/>
+                            <Label FontSize="16" 
+                                   Text=" °C" 
+                                   TextColor="Black"/>
+                        </StackLayout>
+                    </StackLayout>
+                    
+                    <!--3日-->
+                    <!--日期-->
+                    <StackLayout Grid.Row="3" Grid.Column="0" Margin="0,-10,0,0" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <Label FontSize="15" 
+                               HorizontalTextAlignment="Center"
+                               Text="{Binding Data[3].Date}"
+                               TextColor="Black"/>
+                    </StackLayout>
+
+                    <!--天气-->
+                    <StackLayout Grid.Row="3" Grid.Column="1" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <StackLayout VerticalOptions="Center" Orientation="Vertical">
+                            <Image HeightRequest="60" 
+                                   Source="{Binding Data[3].WeaImg,StringFormat='{0}.png'}"
+                                   VerticalOptions="Center" 
+                                   WidthRequest="60"/>
+                            <Label Margin="0,-10,0,0"
+                                   FontSize="16" 
+                                   HorizontalTextAlignment="Center"
+                                   TextColor="Black"
+                                   Text="{Binding Data[3].Wea}"/>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <!--温度-->
+                    <StackLayout Grid.Row="3" Grid.Column="2" Margin="0,0,0,10" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                            <Label FontSize="16" 
+                                   Text="{Binding Data[3].TemNight}" 
+                                   TextColor="Black" 
+                                   WidthRequest="20"
+                                   HorizontalTextAlignment="End"/>
+                            <Label FontSize="16" 
+                                   Text=" / " 
+                                   TextColor="Black"/>
+                            <Label FontSize="16" 
+                                   Text="{Binding Data[3].TemDay}" 
+                                   TextColor="Black" 
+                                   WidthRequest="20"
+                                   HorizontalTextAlignment="Start"/>
+                            <Label FontSize="16" 
+                                   Text=" °C" 
+                                   TextColor="Black"/>
+                        </StackLayout>
+                    </StackLayout>
+                    
+                    <!--4日-->
+                    <!--日期-->
+                    <StackLayout Grid.Row="4" Grid.Column="0" Margin="0,-10,0,0" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <Label FontSize="15" 
+                               HorizontalTextAlignment="Center"
+                               Text="{Binding Data[4].Date}"
+                               TextColor="Black"/>
+                    </StackLayout>
+
+                    <!--天气-->
+                    <StackLayout Grid.Row="4" Grid.Column="1" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <StackLayout VerticalOptions="Center" Orientation="Vertical">
+                            <Image HeightRequest="60" 
+                                   Source="{Binding Data[4].WeaImg,StringFormat='{0}.png'}"
+                                   VerticalOptions="Center" 
+                                   WidthRequest="60"/>
+                            <Label Margin="0,-10,0,0"
+                                   FontSize="16" 
+                                   HorizontalTextAlignment="Center"
+                                   TextColor="Black"
+                                   Text="{Binding Data[4].Wea}"/>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <!--温度-->
+                    <StackLayout Grid.Row="4" Grid.Column="2" Margin="0,0,0,10" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                            <Label FontSize="16" 
+                                   Text="{Binding Data[4].TemNight}" 
+                                   TextColor="Black" 
+                                   WidthRequest="20"
+                                   HorizontalTextAlignment="End"/>
+                            <Label FontSize="16" 
+                                   Text=" / " 
+                                   TextColor="Black"/>
+                            <Label FontSize="16" 
+                                   Text="{Binding Data[4].TemDay}" 
+                                   TextColor="Black" 
+                                   WidthRequest="20"
+                                   HorizontalTextAlignment="Start"/>
+                            <Label FontSize="16" 
+                                   Text=" °C" 
+                                   TextColor="Black"/>
+                        </StackLayout>
+                    </StackLayout>
+                    
+                    <!--5日-->
+                    <!--日期-->
+                    <StackLayout Grid.Row="5" Grid.Column="0" Margin="0,-10,0,0" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <Label FontSize="15" 
+                               HorizontalTextAlignment="Center"
+                               Text="{Binding Data[5].Date}"
+                               TextColor="Black"/>
+                    </StackLayout>
+
+                    <!--天气-->
+                    <StackLayout Grid.Row="5" Grid.Column="1" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <StackLayout VerticalOptions="Center" Orientation="Vertical">
+                            <Image HeightRequest="60" 
+                                   Source="{Binding Data[5].WeaImg,StringFormat='{0}.png'}"
+                                   VerticalOptions="Center" 
+                                   WidthRequest="60"/>
+                            <Label Margin="0,-10,0,0"
+                                   FontSize="16" 
+                                   HorizontalTextAlignment="Center"
+                                   TextColor="Black"
+                                   Text="{Binding Data[5].Wea}"/>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <!--温度-->
+                    <StackLayout Grid.Row="5" Grid.Column="2" Margin="0,0,0,10" VerticalOptions="CenterAndExpand" Orientation="Vertical">
+                        <StackLayout HorizontalOptions="Center" Orientation="Horizontal">
+                            <Label FontSize="16" 
+                                   Text="{Binding Data[1].TemNight}" 
+                                   TextColor="Black" 
+                                   WidthRequest="20"
+                                   HorizontalTextAlignment="End"/>
+                            <Label FontSize="16" 
+                                   Text=" / " 
+                                   TextColor="Black"/>
+                            <Label FontSize="16" 
+                                   Text="{Binding Data[5].TemDay}" 
+                                   TextColor="Black" 
+                                   WidthRequest="20"
+                                   HorizontalTextAlignment="Start"/>
+                            <Label FontSize="16" 
+                                   Text=" °C" 
+                                   TextColor="Black"/>
+                        </StackLayout>
+                    </StackLayout>
+                    
+                </Grid>
+            </StackLayout>
+        </ScrollView>
+
+    </Grid>
+
+</ContentPage>

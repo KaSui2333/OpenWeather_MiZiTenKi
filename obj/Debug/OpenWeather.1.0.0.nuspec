@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>OpenWeather</id>
+    <version>1.0.0</version>
+    <authors>OpenWeather</authors>
+    <description>Package Description</description>
+    <dependencies>
+      <group targetFramework="net6.0-android31.0">
+        <dependency id="Microsoft.Maui.Dependencies" version="6.0.400" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Maui.Extensions" version="6.0.400" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net6.0-ios15.4">
+        <dependency id="Microsoft.Maui.Dependencies" version="6.0.400" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Maui.Extensions" version="6.0.400" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+        <dependency id="System.Runtime.InteropServices.NFloat.Internal" version="6.0.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net6.0-maccatalyst15.4">
+        <dependency id="Microsoft.Maui.Dependencies" version="6.0.400" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Maui.Extensions" version="6.0.400" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+        <dependency id="System.Runtime.InteropServices.NFloat.Internal" version="6.0.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net6.0-windows10.0.19041">
+        <dependency id="Microsoft.Maui.Dependencies" version="6.0.400" exclude="Build,Analyzers" />
+        <dependency id="Microsoft.Maui.Extensions" version="6.0.400" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="13.0.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="D:\code\C#\OpenWeather\bin\Debug\net6.0-android\OpenWeather.runtimeconfig.json" target="lib\net6.0-android31.0\OpenWeather.runtimeconfig.json" />
+    <file src="D:\code\C#\OpenWeather\bin\Debug\net6.0-android\OpenWeather.dll" target="lib\net6.0-android31.0\OpenWeather.dll" />
+    <file src="D:\code\C#\OpenWeather\bin\Debug\net6.0-android\OpenWeather.xml" target="lib\net6.0-android31.0\OpenWeather.xml" />
+    <file src="D:\code\C#\OpenWeather\bin\Debug\net6.0-ios\iossimulator-x64\OpenWeather.runtimeconfig.json" target="lib\net6.0-ios15.4\OpenWeather.runtimeconfig.json" />
+    <file src="D:\code\C#\OpenWeather\bin\Debug\net6.0-ios\iossimulator-x64\OpenWeather.dll" target="lib\net6.0-ios15.4\OpenWeather.dll" />
+    <file src="D:\code\C#\OpenWeather\bin\Debug\net6.0-maccatalyst\maccatalyst-x64\OpenWeather.runtimeconfig.json" target="lib\net6.0-maccatalyst15.4\OpenWeather.runtimeconfig.json" />
+    <file src="D:\code\C#\OpenWeather\bin\Debug\net6.0-maccatalyst\maccatalyst-x64\OpenWeather.dll" target="lib\net6.0-maccatalyst15.4\OpenWeather.dll" />
+    <file src="D:\code\C#\OpenWeather\bin\Debug\net6.0-windows10.0.19041.0\win10-x64\OpenWeather.runtimeconfig.json" target="lib\net6.0-windows10.0.19041\OpenWeather.runtimeconfig.json" />
+    <file src="D:\code\C#\OpenWeather\bin\Debug\net6.0-windows10.0.19041.0\win10-x64\OpenWeather.dll" target="lib\net6.0-windows10.0.19041\OpenWeather.dll" />
+    <file src="D:\code\C#\OpenWeather\bin\Debug\net6.0-windows10.0.19041.0\win10-x64\resources.pri" target="lib\net6.0-windows10.0.19041\resources.pri" />
+  </files>
+</package>

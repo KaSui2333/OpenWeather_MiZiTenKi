@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="OpenWeather.Donate"
+             Title="Donate">
+
+    <ScrollView HorizontalScrollBarVisibility="Never">
+        <StackLayout VerticalOptions="StartAndExpand" Orientation="Vertical">
+            <Image WidthRequest="360"
+                   Source="wx.jpeg"
+                   HorizontalOptions="Center"/>
+            <Image WidthRequest="360"
+                   Source="zfb.jpeg"
+                   HorizontalOptions="Center"/>
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>
